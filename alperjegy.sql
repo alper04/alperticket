@@ -16,7 +16,7 @@ CREATE TABLE users (
     zip_code varchar(10),
     address1 varchar(40),
     address2 varchar(40),
-    registerDate timestamp DEFAULT CURRENT_TIMESTAMP,
+    registerDate datetime DEFAULT CURRENT_TIMESTAMP,
     params varchar(100)
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT DEFAULT NULL,
     amount INT DEFAULT NULL,
-    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    transaction_date datetime DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE ticket_types (
   ticket_type VARCHAR(30),
   city VARCHAR(30),
   price INT,
-  expiration_time TIME,
+  expiration_time datetime,
   FOREIGN KEY (city) REFERENCES cities(city_name)
 );
 
@@ -56,8 +56,8 @@ CREATE TABLE tickets (
     ticket_id BINARY(16) PRIMARY KEY,
     transaction_id INT, 
     ticketType_id INT,
-    valid_date TIMESTAMP NULL,
-    expiry_date TIMESTAMP NULL,
+    valid_date datetime,
+    expiry_date datetime,
     FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id),
     FOREIGN KEY (ticketType_id) REFERENCES ticket_types(ticketType_id)
 );
@@ -67,8 +67,6 @@ CREATE TABLE transport_lines (
     ticketType_id INT,
     line_type varchar(30),
     line_company varchar(30), 
-    departure_time TIMESTAMP NULL,
-    arrival_time TIMESTAMP NULL,
     CONSTRAINT line_identity PRIMARY KEY (line_id, ticketType_id),
     FOREIGN KEY (ticketType_id) REFERENCES ticket_types(ticketType_id),
     FOREIGN KEY (line_type) REFERENCES line_types(line_type),
