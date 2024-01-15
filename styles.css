@@ -1,0 +1,202 @@
+body {
+    background-color: #3b3b80;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.login-container {
+    width: 375px; /* iPhone 11 width */
+    height: 812px; /* iPhone 11 height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(38, 43, 88);
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px black;
+}
+
+.login-container input[type="text"], .login-container input[type="password"] {
+    width: 150%; /* Set width to 150% */
+    padding: 15px;
+    display: block;
+    position: relative; /* Add this line */
+    left: 50%; /* Add this line */
+    transform: translateX(-50%); /* Add this line */
+    margin-bottom: 5px; /* Add 5px space between input fields */
+}
+
+.login-container input[type="submit"] {
+    width: 100%; /* Set width to 150% */
+    padding: 10px;
+    background-color: #4CAF50; /* Adjust to match your color scheme */
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+    margin-top: 10px; /* This will position the button 10 pixels below */
+    display: inline-block;
+    position: relative; /* Add this line */
+    left: 50%; /* Add this line */
+    transform: translateX(-50%); /* Add this line */
+    border: 2px solid #000; /* Button outline */
+    font-size: 16px;
+
+}
+
+.login-container input[type="submit"]:hover {
+    background-color: #45a049; /* Darker shade of green when hovered */
+}
+
+.login-container input[type="submit"]:active {
+    background-color: #3e8e41; /* Even darker shade when clicked */
+}
+
+.login-failed {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+
+
+
+
+
+
+.qr-code {
+    width: 200px; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+    object-fit: contain; /* To maintain aspect ratio */
+}
+
+
+.parent-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Add this line */
+    height: 100vh; /* Add this line */
+}
+
+
+
+.ticket_container {
+    overflow: auto; /* Add this line */
+    position: absolute; /* Add this line */
+    top: 50%; /* Add this line */
+    left: 50%; /* Add this line */
+    transform: translate(-50%, -50%); /* Add this line */
+    width: 375px; /* iPhone 11 width */
+    height: 812px; /* iPhone 11 height */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgb(38, 43, 88);
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px black;
+}
+
+.ticket_container .ticket:first-child {
+    flex: 0 0 auto; /* This will prevent the first ticket from shrinking and growing */
+}
+
+.ticket {
+    background-color: lightgray;
+    border: 5px solid darkgray;
+    padding: 220px 70px;
+    margin-bottom: 20px;
+    position: relative; /* Add this line */
+    margin-left: 10px; /* Add this line */
+    margin-right: 10px; /* Add this line */
+    margin-bottom: 0; /* Change this line */
+    flex-shrink: 0; /* Add this line */
+}
+
+.ticket-city {
+    position: absolute; /* Add this line */
+    top: 5px; /* Add this line */
+    left: 20px; /* Add this line */
+    font-size: 18px;
+}
+
+.ticket-type {
+    font-weight: bold;
+    position: absolute; /* Add this line */
+    top: 5px; /* Adjust this line */
+    left: 20px; /* Adjust this line */
+    margin-top: 50px; /* Add this line to create space between .ticket-company and .ticket-type */
+    font-size: 24px;
+}
+
+.not-valid {
+    background-color: orange;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid orange;
+    box-sizing: border-box;
+    height: 50px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 75px; /* Add this line to move the box 20px below the .ticket-type */
+}
+
+button {
+    background-color: #4CAF50; /* Adjust to match your color scheme */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: 2px solid #000; /* Button outline */
+}
+
+button:hover {
+    background-color: #45a049; /* Darker shade of green when hovered */
+}
+
+button:active {
+    background-color: #3e8e41; /* Even darker shade when clicked */
+}
+
+.validate-ticket {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 150px; /* Adjusted width */
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 75px;
+    margin: auto; /* Center the button */
+}
+
+.button-container {
+    position: relative;
+    top: 365px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 40px;
+    font-size: 14px;
+    padding: 5px 0; /* Adjust this to your desired padding */
+}
