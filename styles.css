@@ -143,13 +143,16 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid orange;
     box-sizing: border-box;
     height: 50px;
     width: 100%;
     position: absolute;
     left: 0;
     top: 75px; /* Add this line to move the box 20px below the .ticket-type */
+}
+
+.valid {
+    background-color: green;
 }
 
 button {

@@ -67,8 +67,9 @@ foreach ($tickets as $ticket) {
                     <p class="ticket-type"><?php echo htmlspecialchars($ticket['ticket_type']); ?></p>
                     <!-- Display the QR code -->
                     <img class="qr-code" src="<?php echo $qr_dir . $ticket['ticket_id'] . '.png'; ?>" alt="QR Code">
-                    <p class="not-valid">Not yet valid</p>
-                    <button class="validate-ticket">Validate Ticket</button>
+                    <p class="not-valid ticket-status">Not yet valid</p>
+                    <p id="countdown-<?php echo $ticket['ticket_id']; ?>"></p>
+                    <button class="validate-ticket" data-ticket-id="<?php echo $ticket['ticket_id']; ?>">Validate Ticket</button>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -77,5 +78,68 @@ foreach ($tickets as $ticket) {
                 <button class="buy-ticket">Buy Tickets</button>
         </div>
     </div>
+   
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+$(document).ready(function() {
+    $('.validate-ticket').click(function() {
+        var ticketID = $(this).data('ticket-id');
+        var ticketStatus = $(this).siblings('.ticket-status');
+        $.post('validate_ticket.php', { ticketID: ticketID }, function(response) {
+            if (response.success) {
+
+                // Update the ticket status in the UI
+                ticketStatus.text('Valid');
+                ticketStatus.css('background-color', 'green');
+
+
+                // Start the countdown timer
+                var expiryDateParts = response.expiry_date.split(/[- :]/);
+                // Ensure the year is four digits
+                var year = expiryDateParts[2].length === 2 ? '20' + expiryDateParts[2] : expiryDateParts[2];
+                var month = expiryDateParts[1] - 1; // adjust month part to be in the range 0-11
+                var day = expiryDateParts[0];
+                var expiryDate = new Date(Date.UTC(year, month, day, expiryDateParts[3], expiryDateParts[4], expiryDateParts[5]));
+                 // Log the expiry_date received from the server
+                console.log("expiry_date from server: ", response.expiry_date);
+
+                // Get the time difference between UTC and the local timezone in milliseconds
+                var timezoneOffset = expiryDate.getTimezoneOffset() * 60 * 1000;
+
+                // Add the timezone offset to the expiry date
+                expiryDate = new Date(expiryDate.getTime() + timezoneOffset);
+
+                // Log the expiryDate after parsing and adjusting for timezone
+                console.log("expiryDate after parsing and adjusting for timezone: ", expiryDate);
+
+                var countdown = setInterval(function() {
+                    var now = new Date().getTime();
+                    var distance = expiryDate - now;
+
+                    // Log the distance calculated in the countdown function
+                    console.log("distance: ", distance);
+
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById("countdown-" + ticketID).innerHTML = days + "d " + hours + "h "
+                    + minutes + "m " + seconds + "s ";
+
+                    if (distance < 0) {
+                        clearInterval(countdown);
+                        ticketStatus.text('EXPIRED');
+                        ticketStatus.css('background-color', 'brown');
+                    }
+                }, 1000);
+            }
+        }, 'json');
+    });
+});
+</script>
+
+
 </body>
 </html>
