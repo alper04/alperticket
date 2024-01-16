@@ -1,4 +1,10 @@
 <?php
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    // The file is not included or required, so stop the script
+    die('Access denied kys xD');
+}
+
 function getDb() {
     $host = 'localhost';
     $db   = 'alperjegy';
@@ -15,3 +21,4 @@ function getDb() {
     return new PDO($dsn, $user, $pass, $opt);
 }
 
+?>

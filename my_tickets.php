@@ -2,6 +2,8 @@
 
 <?php
 
+
+
 // Start the session
 session_start();
 
@@ -12,8 +14,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-// Include db.php
-include 'db.php';
+-include 'db.php';
 // Get the PDO object
 $pdo = getDb();
 // get username from session
@@ -34,8 +35,7 @@ $stmt->execute();
 $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-// Include the QR code library
-require_once 'phpqrcode\qrlib.php';
+-require_once 'phpqrcode\qrlib.php';
 
 // Directory to save QR codes
 $qr_dir = 'qrcodes/';
@@ -83,26 +83,56 @@ foreach ($tickets as $ticket) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 $(document).ready(function() {
-    $('.validate-ticket').click(function() {
-        var ticketID = $(this).data('ticket-id');
-        var ticketStatus = $(this).siblings('.ticket-status');
-        $.post('validate_ticket.php', { ticketID: ticketID }, function(response) {
-            if (response.success) {
 
-                // Update the ticket status in the UI
-                ticketStatus.text('Valid');
-                ticketStatus.css('background-color', 'green');
+    $('.validate-ticket').each(function() {
+    var ticketID = $(this).data('ticket-id');
+    var ticketStatus = $(this).siblings('.ticket-status');
+    var button = $(this); // Store a reference to the button
+    $.post('get_ticket_status.php', { ticketID: ticketID }, function(response) {
+        if (response.status === 'valid') {
+            // Use the stored reference to the button
+            button.prop('disabled', true);
+            button.css('background-color', 'gray');
+            startCountdown(response.expiry_date, ticketID, ticketStatus);
+        } else if (response.status === 'expired') {
+            ticketStatus.text('Ticket expired');
+        } else if (response.status === 'not_valid'){
+            ticketStatus.text('Not Yet Valid');
+        }
+    }, 'json');
+});
+
+$('.validate-ticket').click(function() {
+    var ticketID = $(this).data('ticket-id');
+    var ticketStatus = $(this).siblings('.ticket-status');
+    var button = $(this); // Store a reference to the button
+    $.post('validate_ticket.php', { ticketID: ticketID }, function(response) {
+        if (response.success) {
+            startCountdown(response.expiry_date, ticketID, ticketStatus);
+        }
+    }, 'json');
+    
+    // Use the stored reference to the button
+    button.prop('disabled', true);
+    button.css('background-color', 'gray');
+});
+    
+});
 
 
-                // Start the countdown timer
-                var expiryDateParts = response.expiry_date.split(/[- :]/);
+function startCountdown(resp, ticketID, ticketStatus) {
+    // Update the ticket status in the UI
+    ticketStatus.text('Valid');
+    ticketStatus.css('background-color', 'green');
+    // Start the countdown timer
+    var expiryDateParts = resp.split(/[- :]/);
                 // Ensure the year is four digits
                 var year = expiryDateParts[2].length === 2 ? '20' + expiryDateParts[2] : expiryDateParts[2];
                 var month = expiryDateParts[1] - 1; // adjust month part to be in the range 0-11
                 var day = expiryDateParts[0];
                 var expiryDate = new Date(Date.UTC(year, month, day, expiryDateParts[3], expiryDateParts[4], expiryDateParts[5]));
                  // Log the expiry_date received from the server
-                console.log("expiry_date from server: ", response.expiry_date);
+                console.log("expiry_date from server: ", resp);
 
                 // Get the time difference between UTC and the local timezone in milliseconds
                 var timezoneOffset = expiryDate.getTimezoneOffset() * 60 * 1000;
@@ -130,14 +160,25 @@ $(document).ready(function() {
 
                     if (distance < 0) {
                         clearInterval(countdown);
+                        document.getElementById("countdown-" + ticketID).innerHTML = "";
                         ticketStatus.text('EXPIRED');
                         ticketStatus.css('background-color', 'brown');
                     }
                 }, 1000);
+
+
             }
-        }, 'json');
+
+
+    document.querySelector('.my-tickets').addEventListener('click', function() {
+        window.location.href = 'my_tickets.php';
     });
-});
+
+    document.querySelector('.buy-ticket').addEventListener('click', function() {
+        window.location.href = 'buy_tickets.php';
+    });
+
+
 </script>
 
 
