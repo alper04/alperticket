@@ -1,3 +1,9 @@
+
+
+![Tickets after validated](https://github.com/alper8/alperticket/blob/main/valid.PNG)
+![Tickets after expiry period](https://github.com/alper8/alperticket/blob/main/expired.PNG)
+
+
 ***General Security Features***
 
 
@@ -49,6 +55,7 @@
 2.  **Navigation**:
     1.  A taskbar is included for easy navigation, featuring buttons to access 'My Tickets' and 'Buy Tickets' pages.
 
+
 **Buying Tickets**
 
 1.  **Ticket Selection Process**:
@@ -58,3 +65,5 @@
 2.  **Ticket Purchase**:
     1.  The 'Purchase Ticket' button calls procedure to create a transaction and create a ticket. Note that no actual money processing is implemented, as this is not a live project.
     2.  Purchased tickets can be immediately viewed and used on the 'My Tickets' page.
+![Buying tickets](https://github.com/alper8/alperticket/blob/main/buy.PNG)
+![Tickets not yet activated](https://github.com/alper8/alperticket/blob/main/tickets.PNG)
